@@ -147,7 +147,7 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                                             Image Type
                                                         </span>
                                                         <div class="flex items-center ml-2 mt-2 mb-4">
-                                                            <input id="country-option-1" {...register('imageType', { required: true })} type="radio" name="imageType" value="reel" class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300" aria-labelledby="country-option-1" aria-describedby="country-option-1" checked="" />
+                                                            <input id="country-option-1" {...register('imageType', { required: true })} type="radio" name="imageType" value="reel" class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300" aria-labelledby="country-option-1" aria-describedby="country-option-1" />
                                                             <label for="country-option-1" class="text-sm font-medium text-gray-900 ml-2 block">
                                                                 Reel
                                                             </label>
