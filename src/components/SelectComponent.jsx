@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import ReactSelect from 'react-select';
-const SelectComponent = React.forwardRef(({ value, options, onChange, register, name }, ref) => {
+const SelectComponent = ({ value, options, onChange, register, name }) => {
     console.log("🚀 ~ SelectComponent ~ ref:", ref)
     console.log("🚀 ~ SelectComponent ~ register:", register)
     return (
@@ -20,6 +20,6 @@ const SelectComponent = React.forwardRef(({ value, options, onChange, register, 
 
         </div>
     )
-})
+}
 
 export default SelectComponent
