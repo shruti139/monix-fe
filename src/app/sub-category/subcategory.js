@@ -149,7 +149,7 @@ function SubCategory() {
             <div className="content ml-12 transform ease-in-out duration-500 pt-20 px-2 md:px-5 pb-4 h-[100vh]">
                 <div className="outer-box">
                     <div className='flex justify-between mb-2'>
-                        <h4 className='text-xl font-normal mb-3'>Categories</h4>
+                        <h4 className='text-xl font-normal mb-3'>Sub Categories</h4>
                         <button
                             className="flex h-full gap-3 align-middle mr-3 rounded-lg bg-[#1E293B] py-2 px-6 font-sans text-xs font-bold uppercase text-white transition-all hover:shadow-lg hover:shadow-black-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                             onClick={() => handleOpenModel('add')}

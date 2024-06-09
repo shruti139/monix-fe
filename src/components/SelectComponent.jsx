@@ -2,8 +2,6 @@
 import React from 'react'
 import ReactSelect from 'react-select';
 const SelectComponent = ({ value, options, onChange, register, name }) => {
-    console.log("🚀 ~ SelectComponent ~ ref:", ref)
-    console.log("🚀 ~ SelectComponent ~ register:", register)
     return (
         <div>
             <ReactSelect
@@ -11,7 +9,6 @@ const SelectComponent = ({ value, options, onChange, register, name }) => {
                 classNamePrefix="select"
                 isClearable
                 isSearchable
-                ref={ref}
                 name={name}
                 value={value}
                 onChange={onChange}
