@@ -62,8 +62,8 @@ function Sidebar() {
                     {
                         nav.map((item, index) => {
                             return (
-                                <Link href={item.path} >
-                                    <div key={`${item.name}_${index}`} className={`hover:ml-4 justify-end  ${pathname == item.path ? 'bg-white text-black' : ' bg-[#1E293B] text-white'} hover:text-black w-full hover:bg-white  p-3 rounded-full transform ease-in-out duration-300 flex`}>
+                                <Link href={item.path} key={`${item.name}_${index}`}>
+                                    <div className={`hover:ml-4 justify-end  ${pathname == item.path ? 'bg-white text-black' : ' bg-[#1E293B] text-white'} hover:text-black w-full hover:bg-white  p-3 rounded-full transform ease-in-out duration-300 flex`}>
                                         {item.icon}
                                     </div>
                                 </Link>
