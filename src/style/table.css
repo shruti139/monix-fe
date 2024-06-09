@@ -1,0 +1,32 @@
+.table_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+
+.rdt_TableRow {
+    margin: 5px 0px;
+    border-radius: 6px;
+    border: 1px solid lightgray;
+    text-transform: capitalize;
+    padding: 5px 0px;
+
+}
+
+.rdt_TableCell {
+    color: darkslategray;
+}
+
+.rdt_TableCol_Sortable {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: darkslategray;
+    font-weight: bold;
+}
+
+.rdt_TableHeadRow {
+    border-radius: 5px;
+    border: 1px solid lightgray;
+}
