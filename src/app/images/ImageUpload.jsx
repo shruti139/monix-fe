@@ -30,7 +30,9 @@ function ImageUpload() {
             cell: (row) => {
                 return (<>
                     {
-                        row.image ? <img src={`${process.env.NEXT_PUBLIC_API_URL}/${row.image}`} className="h-12 rounded-full w-12" alt="Product Image" /> : <IconPhoto />
+                        row.image?.length ?
+                            row.image?.map((item, index) => <img src={`${process.env.NEXT_PUBLIC_API_URL}/${item}`} className="h-12 rounded-full w-12 mr-2" alt="Product Image" key={index} />)
+                            : <IconPhoto />
                     }
                 </>)
             },
@@ -80,6 +82,7 @@ function ImageUpload() {
         let data = {
             pageNo: page || 1,
             perPage: perPage || rowsPerPage,
+
         };
 
         await ApiGetImages(data).
@@ -127,15 +130,20 @@ function ImageUpload() {
 
     const onSubmit = (data) => {
         if (openedModal == 'edit') {
-            let EditData = {
-                name: data.name,
-                category: data?.category?.value || data?.category
-
-            };
-            handleApiCall(ApiEditImage, selectedUserData._id, EditData);
+            const formdata = new FormData();
+            for (const file of data.image) {
+                formdata.append("image", file);
+            }
+            formdata.append("name", data.name);
+            formdata.append("category", data.category?.value || data?.category);
+            formdata.append("subcategory", data.subcategory?.value || data?.subcategory);
+            formdata.append("imageType", data?.imageType);
+            handleApiCall(ApiEditImage, selectedUserData._id, formdata);
         } else if (openedModal == 'add') {
             const formdata = new FormData();
-            formdata.append("image", data.image);
+            for (const file of data.image) {
+                formdata.append("image", file);
+            }
             formdata.append("name", data.name);
             formdata.append("category", data.category?.value);
             formdata.append("subcategory", data.subcategory?.value);
@@ -178,7 +186,7 @@ function ImageUpload() {
                         >
                             <IconUserPlus stroke={1.6} color='white' className='' />
                             <span className='flex h-full align-middle m-auto'>
-                                Add  Category
+                                Add  Image
                             </span>
                         </button>
 

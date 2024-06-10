@@ -156,7 +156,7 @@ function SubCategory() {
                         >
                             <IconUserPlus stroke={1.6} color='white' className='' />
                             <span className='flex h-full align-middle m-auto'>
-                                Add  Category
+                                Add Sub Category
                             </span>
                         </button>
 

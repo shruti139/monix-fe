@@ -13,6 +13,7 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
     const [categories, setCategories] = useState()
     const [subCategories, setSubCategories] = useState([])
     const [image, setImage] = useState()
+    console.log("🚀 ~ SimpleModel ~ image:", image)
     const imageRef = useRef()
     console.log("🚀 ~ SimpleModel ~ categories:", categories)
     const {
@@ -30,7 +31,11 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
     useEffect(() => {
         if (openedModal === "edit") {
             setValue('name', selectedUserData?.name);
+            setValue('imageType', selectedUserData?.imageType);
             setValue('category', { label: selectedUserData?.category?.name, value: selectedUserData?.category?._id });
+            setValue('subcategory', { label: selectedUserData?.subcategory?.name, value: selectedUserData?.subcategory?._id });
+            setValue('image', selectedUserData?.image);
+            setImage(selectedUserData?.image?.map((item) => `${process.env.NEXT_PUBLIC_API_URL}/${item}`));
         }
     }, [selectedUserData])
 
@@ -76,7 +81,7 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                 {/*header*/}
                                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                                     <h3 className="text-2xl font-semibold">
-                                        {openedModal === "add" ? "Add Sub Category" : openedModal === "edit" ? "Edit Sub Category" : "Delete  Sub Category"}
+                                        {openedModal === "add" ? "Add Image" : openedModal === "edit" ? "Edit Image" : "Delete Image"}
                                     </h3>
                                     <button
                                         className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -99,34 +104,46 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                                             Image
                                                         </span>
                                                         <div className='flex gap-4 items-center'>
-                                                            {image ? <div id="preview" class="my-4 flex">
-                                                                <div class="relative w-32 h-32 object-cover rounded ">
-                                                                    <div x-show="image.preview" class="relative w-32 h-32 object-cover rounded">
-                                                                        <img src={image} class="w-32 h-32 object-cover rounded" />
+                                                            {image?.length ?
+                                                                image.map((item, i) => <div id="preview" class="my-4 flex">
+                                                                    <div class="relative w-32 h-32 object-cover rounded ">
+                                                                        <div x-show="image.preview" class="relative w-32 h-32 object-cover rounded">
+                                                                            <img src={item} class="w-32 h-32 object-cover rounded" />
+                                                                        </div>
+                                                                        <div className='absolute top-2 cursor-pointer bg-white rounded-full right-2' onClick={() => {
+                                                                            image.splice(i, 1)
+                                                                            setImage([...image])
+                                                                        }}>
+
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
+                                                                                <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+                                                                            </svg>
+                                                                        </div>
+
+
                                                                     </div>
-
-
-                                                                </div>
-                                                            </div> : null}
-                                                            {image ?
+                                                                </div>)
+                                                                : null}
+                                                            {image?.length ?
                                                                 <button id="button" onClick={() => setImage(null)} class="my-2 flex px-3 py-1 text-sm items-center bg-slate-900 text-white rounded-lg hover:bg-gray-300 focus:shadow-outline focus:outline-none">
                                                                     Remove
                                                                 </button>
                                                                 : <div class="icons flex text-gray-500 m-2">
-                                                                    <label id="select-image">
-                                                                        <button onClick={() => imageRef.current.click()} id="button" class="my-2 flex px-3 py-1 text-sm items-center bg-slate-900 text-white rounded-lg hover:bg-gray-300 focus:shadow-outline focus:outline-none">
-                                                                            <svg class="mr-2 cursor-pointer hover:text-gray-700  rounded-full p-1 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                                                            </svg>
-                                                                            Upload a file
-                                                                        </button>
-                                                                        <input hidden type="file"  {...register('image', { required: true })} ref={imageRef} onChange={(e) => {
+                                                                    <button onClick={() => imageRef.current.click()} type='button' class="my-2 flex px-3 py-1 text-sm items-center bg-slate-900 text-white rounded-lg hover:bg-gray-300 focus:shadow-outline focus:outline-none">
+                                                                        <svg class="mr-2 cursor-pointer hover:text-gray-700  rounded-full p-1 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                                        </svg>
+                                                                        Upload a file
+                                                                    </button>
+                                                                    <div>
+                                                                        <input hidden type="file" multiple  {...register('image', { required: true })} ref={imageRef} onChange={(e) => {
                                                                             clearErrors("image")
-                                                                            setValue('image', e.target.files[0])
-                                                                            setImage(URL.createObjectURL(e.target.files[0]))
+                                                                            setValue('image', Object.values(e.target.files))
+                                                                            setImage(Object.values(e.target.files)?.map((item) => URL.createObjectURL(item)))
                                                                         }} />
 
-                                                                    </label>
+                                                                    </div>
+
                                                                 </div>}
 
                                                         </div>
