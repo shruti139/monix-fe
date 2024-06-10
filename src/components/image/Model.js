@@ -105,7 +105,7 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                                         </span>
                                                         <div className='flex gap-4 items-center'>
                                                             {image?.length ?
-                                                                image.map((item, i) => <div id="preview" class="my-4 flex">
+                                                                image.map((item, i) => <div id="preview" key={i} class="my-4 flex">
                                                                     <div class="relative w-32 h-32 object-cover rounded ">
                                                                         <div x-show="image.preview" class="relative w-32 h-32 object-cover rounded">
                                                                             <img src={item} class="w-32 h-32 object-cover rounded" />
