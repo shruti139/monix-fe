@@ -23,6 +23,13 @@ function User() {
 
     let columns = [
         {
+            name: "Category Image",
+            selector: (row) => <>
+                <img src={`${process.env.NEXT_PUBLIC_API_URL}/${row.image}`} className="h-12 rounded-full w-12" alt="Product Image" />
+            </>,
+            sortable: true,
+        },
+        {
             name: "Category Name",
             selector: (row) => row.name,
             sortable: true,
@@ -103,16 +110,18 @@ function User() {
 
     const onSubmit = (data) => {
         if (openedModal == 'edit') {
-            let EditData = {
-                name: data.name,
-            };
-            handleApiCall(ApiEditCategory, selectedUserData._id, EditData);
-        } else if (openedModal == 'add') {
-            let AddData = {
-                name: data.name,
+            const formdata = new FormData();
 
-            };
-            handleApiCall(ApiAddCategory, AddData);
+            formdata.append("name", data.name);
+            formdata.append("image", data.image);
+            handleApiCall(ApiEditCategory, selectedUserData._id, formdata);
+        } else if (openedModal == 'add') {
+            const formdata = new FormData();
+
+            formdata.append("name", data.name);
+            formdata.append("image", data.image);
+
+            handleApiCall(ApiAddCategory, formdata);
         } else {
             handleApiCall(ApiDeleteCategory, selectedUserData._id);
         }
