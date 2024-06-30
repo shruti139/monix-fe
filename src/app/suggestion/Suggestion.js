@@ -7,8 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { handleRowPerPage, loading } from '../Redux/Features/CommonSlice';
 import { ApiGetSubCategories, ApiEditSubCategory, ApiAddSubCategory, ApiDeleteSubCategory } from '@/api-wrapper/ApiSubCategory';
 import { SimpleModel } from '@/components/sub-category/Model';
+import { ApiDeleteSuggestion, ApiGetSuggestion } from '@/api-wrapper/ApiSuggestion';
 
-function SubCategory() {
+function Suggestion() {
 
     const dispatch = useDispatch()
     const rowsPerPage = useSelector((state) => state.common.rowPerPage);
@@ -18,25 +19,18 @@ function SubCategory() {
     const [showModal, setShowModal] = useState(false);
     const [openedModal, setOpenedModal] = useState('edit');
     const [selectedUserData, setSelectedUserData] = useState()
-    console.log("🚀 ~ User ~ selectedUserData:", selectedUserData)
     const [tableData, setTableData] = useState([])
 
     let columns = [
+
         {
-            name: "Sub Category Image",
-            selector: (row) => <>
-                <img src={`${process.env.NEXT_PUBLIC_API_URL}/${row.image}`} className="h-12 rounded-full w-12" alt="Product Image" />
-            </>,
-            sortable: true,
-        },
-        {
-            name: "Sub Category",
+            name: "Name",
             selector: (row) => row.name,
             sortable: true,
         },
         {
-            name: "Category",
-            selector: (row) => row.category?.name,
+            name: "Suggestion",
+            selector: (row) => row.suggestion,
             sortable: true,
         },
 
@@ -44,16 +38,11 @@ function SubCategory() {
             name: "Action",
             cell: (row) => (
                 <div className="flex gap-3">
-                    <button
-                        className="flex align-middle justify-center h-12 max-h-[35px] w-12 max-w-[35px] rounded-lg bg-[#e4f8e4] hover:shadow-lg hover:shadow-green-500/40"
-                        onClick={() => handleOpenModel('edit', row)}
-                    >
-                        <IconPencil stroke={1.6} color='#049104' className='flex h-full' />
-                    </button>
+
 
                     <button
                         className="flex align-middle justify-center h-12 max-h-[35px] w-12 max-w-[35px] rounded-lg bg-[#ecd3d3] hover:shadow-lg hover:shadow-red-500/40"
-                        onClick={() => handleOpenModel('delete', row)}
+                        onClick={() => handleApiCall(ApiDeleteSuggestion, row._id)}
                     >
                         <IconTrash stroke={1.6} color='red' className='flex h-full' />
                     </button>
@@ -70,11 +59,11 @@ function SubCategory() {
             perPage: perPage || rowsPerPage,
         };
 
-        await ApiGetSubCategories(data).
+        await ApiGetSuggestion(data).
             then((res) => {
                 console.log("🚀 ~ then ~ res:", res)
-                if (res?.success) {
-                    setTableData(res.subcategories);
+                if (res?.length) {
+                    setTableData(res);
                     setcurrentPage(res.currentPageNo);
                     setTotalRecords(res.totalRecords);
                 } else {
@@ -96,14 +85,10 @@ function SubCategory() {
         dispatch(loading(true))
         try {
             const res = await apiFunction(data, data1);
-            if (res.success) {
-                Toast.success(res.message);
-                handleList();
-                dispatch(loading(false))
-            } else {
-                Toast.error(res.message);
-                dispatch(loading(false))
-            }
+            Toast.success(res.message);
+            handleList();
+            dispatch(loading(false))
+
         } catch (err) {
             dispatch(loading(false))
             Toast.error("something went to wrong!!");
@@ -131,7 +116,7 @@ function SubCategory() {
             formdata.append("image", data.image);
             handleApiCall(ApiAddSubCategory, formdata);
         } else {
-            handleApiCall(ApiDeleteSubCategory, selectedUserData._id);
+            handleApiCall(ApiDeleteSuggestion, selectedUserData._id);
         }
     }
 
@@ -159,16 +144,8 @@ function SubCategory() {
             <div className="content ml-12 transform ease-in-out duration-500 pt-20 px-2 md:px-5 pb-4 h-[100vh]">
                 <div className="outer-box">
                     <div className='flex justify-between mb-2'>
-                        <h4 className='text-xl font-normal mb-3'>Sub Categories</h4>
-                        <button
-                            className="flex h-full gap-3 align-middle mr-3 rounded-lg bg-[#1E293B] py-2 px-6 font-sans text-xs font-bold uppercase text-white transition-all hover:shadow-lg hover:shadow-black-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                            onClick={() => handleOpenModel('add')}
-                        >
-                            <IconUserPlus stroke={1.6} color='white' className='' />
-                            <span className='flex h-full align-middle m-auto'>
-                                Add Sub Category
-                            </span>
-                        </button>
+                        <h4 className='text-xl font-normal mb-3'>Suggestion</h4>
+
 
                     </div>
                     <DataTable
@@ -177,17 +154,11 @@ function SubCategory() {
                         striped={true}
                         data={tableData}
                         pagination
-                        paginationServer
-                        paginationPerPage={rowsPerPage}
-                        onChangeRowsPerPage={(event) => {
-                            dispatch(handleRowPerPage(event))
-                            handleList(currentPage, event);
-                        }}
+
                         onChangePage={(page) => {
                             handleList(page);
                         }}
-                        paginationDefaultPage={currentPage}
-                        paginationTotalRows={totalRecords}
+
                         fixedHeader
                     />
                 </div>
@@ -196,4 +167,4 @@ function SubCategory() {
     )
 }
 
-export default SubCategory;
+export default Suggestion;

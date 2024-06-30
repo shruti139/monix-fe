@@ -1,7 +1,8 @@
 'use client'
 import React from 'react'
 import Sidebar from './sidebar/sidebar';
-import Header from './header/header';
+import dynamic from 'next/dynamic';
+const Header = dynamic(() => import('./header/header'), { ssr: false });
 
 function View() {
     // const [open, setOpen] = React.useState(false);

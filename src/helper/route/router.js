@@ -17,5 +17,13 @@ export let route = [
   {
     id: 3,
     name: "Sub Category", path: "/sub-category", icon: <IconSettings />
+  },
+  {
+    id: 4,
+    name: "Suggestion", path: "/suggestion", icon: <IconSettings />
+  },
+  {
+    id: 5,
+    name: "Ads", path: "/ads", icon: <IconSettings />
   }
 ];
