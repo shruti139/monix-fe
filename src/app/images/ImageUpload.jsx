@@ -30,8 +30,8 @@ function ImageUpload() {
             cell: (row) => {
                 return (<>
                     {
-                        row.image?.length ?
-                            row.image?.map((item, index) => <img src={`${process.env.NEXT_PUBLIC_API_URL}/${item}`} className="h-12 rounded-full w-12 mr-2" alt="Product Image" key={index} />)
+                        row.image ?
+                            <img src={`${process.env.NEXT_PUBLIC_API_URL}/${row.image}`} className="h-12 rounded-full w-12 mr-2" alt="Product Image" />
                             : <IconPhoto />
                     }
                 </>)
