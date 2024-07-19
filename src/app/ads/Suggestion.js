@@ -14,15 +14,12 @@ function Suggestion() {
     const dispatch = useDispatch()
     const rowsPerPage = useSelector((state) => state.common.rowPerPage);
 
-    const [currentPage, setcurrentPage] = useState(1);
-    const [totalRecords, setTotalRecords] = useState(0);
+
     const [showModal, setShowModal] = useState(false);
     const [openedModal, setOpenedModal] = useState('edit');
     const [selectedUserData, setSelectedUserData] = useState()
     const [adsData, setAdsData] = useState({})
     const [adsApiData, setAdsApiData] = useState({})
-    console.log("🚀 ~ Suggestion ~ adsData:", adsData)
-    const [tableData, setTableData] = useState([])
 
     let columns = [
 

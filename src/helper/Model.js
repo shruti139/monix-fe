@@ -6,7 +6,6 @@ import '../style/layout.css';
 
 export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserData, showModal }) => {
     const [image, setImage] = useState()
-    console.log("🚀 ~ SimpleModel ~ image:", image)
     const imageRef = useRef()
     const {
         register,

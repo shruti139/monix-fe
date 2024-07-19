@@ -28,7 +28,6 @@ function Login() {
         }
         ApiLogin(dataPass)
             .then((res) => {
-                console.log("🚀 ~ .then ~ res:", res)
                 if (res.data) {
                     dispatch(loading(true))
                     let userData = {

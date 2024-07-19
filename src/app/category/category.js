@@ -18,7 +18,6 @@ function User() {
     const [showModal, setShowModal] = useState(false);
     const [openedModal, setOpenedModal] = useState('edit');
     const [selectedUserData, setSelectedUserData] = useState()
-    console.log("🚀 ~ User ~ selectedUserData:", selectedUserData)
     const [tableData, setTableData] = useState([])
 
     let columns = [

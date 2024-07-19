@@ -61,7 +61,6 @@ function Suggestion() {
 
         await ApiGetSuggestion(data).
             then((res) => {
-                console.log("🚀 ~ then ~ res:", res)
                 if (res?.length) {
                     setTableData(res);
                     setcurrentPage(res.currentPageNo);

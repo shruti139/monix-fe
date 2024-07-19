@@ -11,7 +11,6 @@ function Sidebar() {
     const [nav, setNav] = React.useState([]);
     const [isNavOpen, setIsNavOpen] = React.useState(false);
     const pathname = usePathname()
-    console.log("🚀 ~ Sidebar ~ pathname:", pathname)
     function openNav() {
         setIsNavOpen(!isNavOpen)
     }

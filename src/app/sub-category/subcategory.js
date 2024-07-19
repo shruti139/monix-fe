@@ -18,7 +18,6 @@ function SubCategory() {
     const [showModal, setShowModal] = useState(false);
     const [openedModal, setOpenedModal] = useState('edit');
     const [selectedUserData, setSelectedUserData] = useState()
-    console.log("🚀 ~ User ~ selectedUserData:", selectedUserData)
     const [tableData, setTableData] = useState([])
 
     let columns = [
@@ -72,7 +71,6 @@ function SubCategory() {
 
         await ApiGetSubCategories(data).
             then((res) => {
-                console.log("🚀 ~ then ~ res:", res)
                 if (res?.success) {
                     setTableData(res.subcategories);
                     setcurrentPage(res.currentPageNo);

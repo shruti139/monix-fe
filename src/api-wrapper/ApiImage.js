@@ -4,7 +4,7 @@ import axios from "axios";
 let url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/images`;
 
 const ApiGetImages = (data) => {
-    return axios.get(`${url}?limit=${data?.perPage}&page=${data?.pageNo}&trending=true`)
+    return axios.get(`${url}?limit=${data?.perPage}&page=${data?.pageNo}`)
         .then(res => res.data).catch(res => res.data)
 }
 const ApiGetAllImages = (data) => {

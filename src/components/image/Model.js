@@ -9,13 +9,10 @@ import { ApiGetSubCategoriesByCategory } from '@/api-wrapper/ApiSubCategory';
 // import '';
 
 export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserData, showModal }) => {
-    console.log("🚀 ~ SimpleModel ~ selectedUserData:", selectedUserData)
     const [categories, setCategories] = useState()
     const [subCategories, setSubCategories] = useState([])
     const [image, setImage] = useState()
-    console.log("🚀 ~ SimpleModel ~ image:", image)
     const imageRef = useRef()
-    console.log("🚀 ~ SimpleModel ~ categories:", categories)
     const {
         control,
         register,
@@ -27,15 +24,16 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
     } = useForm()
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const category = watch("category")
-    console.log("🚀 ~ SimpleModel ~ category:", category)
     useEffect(() => {
         if (openedModal === "edit") {
+            setValue('id', selectedUserData?.id);
             setValue('name', selectedUserData?.name);
             setValue('imageType', selectedUserData?.imageType);
             setValue('category', { label: selectedUserData?.category?.name, value: selectedUserData?.category?._id });
             setValue('subcategory', { label: selectedUserData?.subcategory?.name, value: selectedUserData?.subcategory?._id });
             setValue('image', selectedUserData?.image);
-            setImage(selectedUserData?.image?.map((item) => `${process.env.NEXT_PUBLIC_API_URL}/${item}`));
+            setValue('trending', selectedUserData?.trending);
+            setImage(`${process.env.NEXT_PUBLIC_API_URL}/${selectedUserData?.image}`);
         }
     }, [selectedUserData])
 
@@ -59,7 +57,6 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
     const getSubCategories = async () => {
         try {
             const res = await ApiGetSubCategoriesByCategory(category?.value)
-            console.log("🚀 ~ getSubCategories ~ res:", res)
             setSubCategories(res?.subcategory?.map((item) => ({ label: item?.name, value: item?._id })));
             return res;
         } catch (error) {
@@ -67,6 +64,7 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
             throw error;
         }
     }
+    const trending = watch("trending")
 
     return (
         <>
@@ -104,13 +102,12 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                                             Image
                                                         </span>
                                                         <div className='flex gap-4 items-center'>
-                                                            {image?.length ?
-                                                                image.map((item, i) => <div id="preview" key={i} class="my-4 flex">
+                                                       {image &&
                                                                     <div class="relative w-32 h-32 object-cover rounded ">
                                                                         <div x-show="image.preview" class="relative w-32 h-32 object-cover rounded">
-                                                                            <img src={item} class="w-32 h-32 object-cover rounded" />
+                                                                            <img src={image} class="w-32 h-32 object-cover rounded" />
                                                                         </div>
-                                                                        <div className='absolute top-2 cursor-pointer bg-white rounded-full right-2' onClick={() => {
+                                                                        {/* <div className='absolute top-2 cursor-pointer bg-white rounded-full right-2' onClick={() => {
                                                                             image.splice(i, 1)
                                                                             setImage([...image])
                                                                         }}>
@@ -118,13 +115,12 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
                                                                                 <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                                                                             </svg>
-                                                                        </div>
+                                                                        </div> */}
 
 
-                                                                    </div>
-                                                                </div>)
-                                                                : null}
-                                                            {image?.length ?
+                                                                    </div>}
+                                                                </div>
+                                                            {image ?
                                                                 <button id="button" onClick={() => setImage(null)} class="my-2 flex px-3 py-1 text-sm items-center bg-slate-900 text-white rounded-lg hover:bg-gray-300 focus:shadow-outline focus:outline-none">
                                                                     Remove
                                                                 </button>
@@ -138,15 +134,14 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                                                     <div>
                                                                         <input hidden type="file" multiple  {...register('image', { required: true })} ref={imageRef} onChange={(e) => {
                                                                             clearErrors("image")
-                                                                            setValue('image', Object.values(e.target.files))
-                                                                            setImage(Object.values(e.target.files)?.map((item) => URL.createObjectURL(item)))
+                                                                            setValue('image', e.target.files[0])
+                                                                            setImage( URL.createObjectURL(e.target.files[0]))
                                                                         }} />
 
                                                                     </div>
 
                                                                 </div>}
 
-                                                        </div>
 
                                                     </div>
                                                     {errors.image && <span className='text-xs font-semibold text-red-500 mb-2' >Image is required</span>}
@@ -178,6 +173,43 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                                         </div>
                                                     </div>
                                                     {errors.imageType && <span className='text-xs font-semibold text-red-500 mb-2' >Image Type is required</span>}
+                                                    <div class="inline-flex items-center">
+                                                        <label
+                                                            class="relative flex cursor-pointer items-center rounded-full py-3 mr-2"
+                                                            for="login"
+                                                            data-ripple-dark="true"
+                                                        >
+                                                            <input
+                                                                id="login"
+                                                                checked={trending}
+                                                                {...register('trending')}
+                                                                type="checkbox"
+                                                                class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-pink-500 checked:bg-pink-500 checked:before:bg-pink-500 hover:before:opacity-10"
+                                                            />
+                                                            <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5"
+                                                                    viewBox="0 0 20 20"
+                                                                    fill="currentColor"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="1"
+                                                                >
+                                                                    <path
+                                                                        fill-rule="evenodd"
+                                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                        clip-rule="evenodd"
+                                                                    ></path>
+                                                                </svg>
+                                                            </div>
+                                                        </label>
+                                                        <label
+                                                            class="mt-px cursor-pointer select-none font-light text-gray-700"
+                                                            for="login"
+                                                        >
+                                                            Trending
+                                                        </label>
+                                                    </div>
                                                     <div className="mb-1 pt-0">
                                                         <span className="text-xs font-semibold inline-block py-1 px-2 rounded text-black-600  uppercase last:mr-0 mr-1">
                                                             Category
@@ -235,7 +267,7 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                             type="submit"
                                         >
                                             {
-                                                openedModal === "edit" ? "Save" : openedModal == "add" ? "Add Sub Category" : "Delete Sub Category"
+                                                openedModal === "edit" ? "Save" : openedModal == "add" ? "Add Image" : "Delete Image"
                                             }
                                         </button>
                                     </div>

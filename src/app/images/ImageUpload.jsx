@@ -19,7 +19,6 @@ function ImageUpload() {
     const [showModal, setShowModal] = useState(false);
     const [openedModal, setOpenedModal] = useState('edit');
     const [selectedUserData, setSelectedUserData] = useState()
-    console.log("🚀 ~ User ~ selectedUserData:", selectedUserData)
     const [tableData, setTableData] = useState([])
 
     let columns = [
@@ -41,6 +40,11 @@ function ImageUpload() {
         {
             name: "Image Name",
             selector: (row) => row?.name,
+            sortable: true,
+        },
+        {
+            name: "Trending",
+            selector: (row) => row?.trending ? "True" : "False",
             sortable: true,
         },
         {
@@ -87,11 +91,10 @@ function ImageUpload() {
 
         await ApiGetImages(data).
             then((res) => {
-                console.log("🚀 ~ then ~ res:", res)
                 if (res?.success) {
                     setTableData(res.imagess);
-                    setcurrentPage(res.currentPageNo);
-                    setTotalRecords(res.totalRecords);
+                    // setcurrentPage(res.currentPageNo);
+                    setTotalRecords(res.total);
                 } else {
                     Toast.error(res.message);
                 }
@@ -129,25 +132,30 @@ function ImageUpload() {
     };
 
     const onSubmit = (data) => {
+        debugger
         if (openedModal == 'edit') {
             const formdata = new FormData();
             for (const file of data.image) {
-                formdata.append("image", file);
             }
+            formdata.append("image", data.image);
             formdata.append("name", data.name);
+            formdata.append("id", data.id);
             formdata.append("category", data.category?.value || data?.category);
             formdata.append("subcategory", data.subcategory?.value || data?.subcategory);
             formdata.append("imageType", data?.imageType);
+            formdata.append("trending", data?.trending);
             handleApiCall(ApiEditImage, selectedUserData._id, formdata);
         } else if (openedModal == 'add') {
             const formdata = new FormData();
             for (const file of data.image) {
-                formdata.append("image", file);
             }
             formdata.append("name", data.name);
+            formdata.append("image", data.image);
             formdata.append("category", data.category?.value);
             formdata.append("subcategory", data.subcategory?.value);
             formdata.append("imageType", data?.imageType);
+            formdata.append("trending", data?.trending);
+
 
             handleApiCall(ApiAddImage, formdata);
         } else {
