@@ -135,8 +135,6 @@ function ImageUpload() {
         debugger
         if (openedModal == 'edit') {
             const formdata = new FormData();
-            for (const file of data.image) {
-            }
             formdata.append("image", data.image);
             formdata.append("name", data.name);
             formdata.append("id", data.id);
@@ -148,9 +146,9 @@ function ImageUpload() {
         } else if (openedModal == 'add') {
             const formdata = new FormData();
             for (const file of data.image) {
+                formdata.append("image", file);
             }
             formdata.append("name", data.name);
-            formdata.append("image", data.image);
             formdata.append("category", data.category?.value);
             formdata.append("subcategory", data.subcategory?.value);
             formdata.append("imageType", data?.imageType);

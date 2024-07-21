@@ -26,14 +26,14 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
     const category = watch("category")
     useEffect(() => {
         if (openedModal === "edit") {
-            setValue('id', selectedUserData?.id);
+            setValue('id', selectedUserData?._id);
             setValue('name', selectedUserData?.name);
             setValue('imageType', selectedUserData?.imageType);
             setValue('category', { label: selectedUserData?.category?.name, value: selectedUserData?.category?._id });
             setValue('subcategory', { label: selectedUserData?.subcategory?.name, value: selectedUserData?.subcategory?._id });
             setValue('image', selectedUserData?.image);
             setValue('trending', selectedUserData?.trending);
-            setImage(`${process.env.NEXT_PUBLIC_API_URL}/${selectedUserData?.image}`);
+            setImage([`${process.env.NEXT_PUBLIC_API_URL}/${selectedUserData?.image}`]);
         }
     }, [selectedUserData])
 
@@ -102,12 +102,13 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                                             Image
                                                         </span>
                                                         <div className='flex gap-4 items-center'>
-                                                       {image &&
+                                                        {image?.length ?  
+                                                                image.map((item, i) => <div id="preview" key={i} class="my-4 flex">
                                                                     <div class="relative w-32 h-32 object-cover rounded ">
                                                                         <div x-show="image.preview" class="relative w-32 h-32 object-cover rounded">
-                                                                            <img src={image} class="w-32 h-32 object-cover rounded" />
+                                                                            <img src={item} class="w-32 h-32 object-cover rounded" />
                                                                         </div>
-                                                                        {/* <div className='absolute top-2 cursor-pointer bg-white rounded-full right-2' onClick={() => {
+                                                                        <div className='absolute top-2 cursor-pointer bg-white rounded-full right-2' onClick={() => {
                                                                             image.splice(i, 1)
                                                                             setImage([...image])
                                                                         }}>
@@ -115,12 +116,15 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
                                                                                 <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                                                                             </svg>
-                                                                        </div> */}
+                                                                        </div>
 
 
-                                                                    </div>}
+                                                                    </div>
+                                                                </div>)
+                                                               
+                                                                : null}
                                                                 </div>
-                                                            {image ?
+                                                                {(image?.length ) ?
                                                                 <button id="button" onClick={() => setImage(null)} class="my-2 flex px-3 py-1 text-sm items-center bg-slate-900 text-white rounded-lg hover:bg-gray-300 focus:shadow-outline focus:outline-none">
                                                                     Remove
                                                                 </button>
@@ -132,10 +136,10 @@ export const SimpleModel = ({ handleClose, onSubmit, openedModal, selectedUserDa
                                                                         Upload a file
                                                                     </button>
                                                                     <div>
-                                                                        <input hidden type="file" multiple  {...register('image', { required: true })} ref={imageRef} onChange={(e) => {
+                                                                        <input hidden type="file" multiple={!selectedUserData?._id ? true : false}  {...register('image', { required: true })} ref={imageRef} onChange={(e) => {
                                                                             clearErrors("image")
-                                                                            setValue('image', e.target.files[0])
-                                                                            setImage( URL.createObjectURL(e.target.files[0]))
+                                                                            setValue('image',selectedUserData?._id ? e.target.files[0] : Object.values(e.target.files))
+                                                                            setImage(selectedUserData?._id ?  [URL.createObjectURL(e.target.files[0])] : Object.values(e.target.files)?.map((item) => URL.createObjectURL(item)))
                                                                         }} />
 
                                                                     </div>
